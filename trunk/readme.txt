@@ -1,0 +1,1 @@
+see bsp/sz_iv_f107vct/project.uvproj
