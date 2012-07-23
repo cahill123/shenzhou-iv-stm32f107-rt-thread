@@ -19,6 +19,11 @@
 #include "board.h"
 #include "led.h"
 
+#ifdef RT_USING_SPI
+#include "stm32f10x_spi.h"
+#include "rt_stm32f10x_spi.h"
+#endif
+
 /**
  * @addtogroup STM32
  */
@@ -91,7 +96,42 @@ void rt_hw_board_init()
 
 	rt_hw_led_init();
 	rt_hw_usart_init();
+
+#ifdef RT_USING_SPI
+    rt_stm32f10x_spi_init();
+
+#   ifdef USING_SPI1
+    /* attach spi10 : CS PA4 */
+    {
+        static struct rt_spi_device rt_spi_device;
+        static struct stm32_spi_cs  stm32_spi_cs;
+        GPIO_InitTypeDef GPIO_InitStructure;
+
+        stm32_spi_cs.GPIOx = GPIOB;
+        stm32_spi_cs.GPIO_Pin = GPIO_Pin_9;
+
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+
+        GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_9;
+        GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_Out_PP;
+        GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+        GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+        GPIO_SetBits(GPIOB, GPIO_Pin_9);
+
+        rt_spi_bus_attach_device(&rt_spi_device, "spi10", "spi1", (void*)&stm32_spi_cs);
+    }
+#   endif
+#endif
+
+
 	rt_console_set_device(CONSOLE_DEVICE);
+}
+
+void rt_hw_spi1_baud_rate(uint16_t SPI_BaudRatePrescaler)
+{
+	SPI1->CR1 &= ~SPI_BaudRatePrescaler_256;
+	SPI1->CR1 |= SPI_BaudRatePrescaler;
 }
 
 /*@}*/

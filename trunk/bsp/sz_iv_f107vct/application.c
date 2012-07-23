@@ -29,6 +29,11 @@
 #include <dfs_fs.h>
 #endif
 
+#ifdef RT_USING_SPI
+//#include <spi_flash_at45dbxx.h>
+#include <spi_flash_sst25vfxx.h>
+#endif
+
 #ifdef RT_USING_LWIP
 #include <lwip/sys.h>
 #include <lwip/api.h>
@@ -43,21 +48,35 @@ void rt_init_thread_entry(void* parameter)
 	{
 		/* init the device filesystem */
 		dfs_init();
+#ifdef RT_USING_SPI
+	    /* init hardware device */
+	    if(sst25vfxx_init("flash0", "spi10") != RT_EOK)
+	    {							 
+	    	rt_kprintf("[error] No such spi flash!\r\n");
+	    }
+#endif
 
 #ifdef RT_USING_DFS_ELMFAT
 		/* init the elm chan FatFs filesystam*/
 		elm_init();
 
+#ifdef RT_USING_SPI
+		if (dfs_mount("flash0", "/flash0", "elm", 0, 0) == 0)
+			rt_kprintf("SPI File System initialized!\n");
+		else
+			rt_kprintf("SPI File System init failed!\n");
+#endif
+
         /* init sdcard driver */
-        rt_hw_sdcard_init();
+        //rt_hw_sdcard_init();
 
         /* mount sd card fat partition 1 as root directory */
-        if (dfs_mount("sd0", "/", "elm", 0, 0) == 0)
-        {
-            rt_kprintf("File System initialized!\n");
-        }
-        else
-            rt_kprintf("File System initialzation failed!\n");
+        //if (dfs_mount("sd0", "/sd0", "elm", 0, 0) == 0)
+        //{
+        //    rt_kprintf("File System initialized!\n");
+        //}
+        //else
+        //    rt_kprintf("File System initialzation failed!\n");
 #endif
 	}
 #endif
