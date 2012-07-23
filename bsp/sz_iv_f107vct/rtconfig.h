@@ -60,6 +60,7 @@
 /* Using Device System */
 #define RT_USING_DEVICE
 #define RT_USING_UART1
+#define RT_USING_SPI
 
 /* SECTION: Console options */
 #define RT_USING_CONSOLE
@@ -74,6 +75,7 @@
 
 /* SECTION: device filesystem */
 #define RT_USING_DFS
+#define DFS_USING_WORKDIR
 #define RT_USING_DFS_ELMFAT
 #define RT_DFS_ELM_WORD_ACCESS
 /* Reentrancy (thread safe) of the FatFs module.  */
