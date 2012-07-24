@@ -1,5 +1,5 @@
 /*
- * File      : rtdef.h
+ * File      : spi_flash_w25qxx.h
  * This file is part of RT-Thread RTOS
  * COPYRIGHT (C) 2006 - 2011, RT-Thread Development Team
  *
@@ -18,15 +18,14 @@
 #include <rtthread.h>
 #include <drivers/spi.h>
 
-struct spi_flash_sst25vfxx
+struct spi_flash_device
 {
     struct rt_device                flash_device;
     struct rt_device_blk_geometry   geometry;
     struct rt_spi_device *          rt_spi_device;
-    struct rt_mutex                 lock;
 };
 
-extern rt_err_t sst25vfxx_init(const char * flash_device_name, const char * spi_device_name);
+extern rt_err_t w25qxx_init(const char * flash_device_name, const char * spi_device_name);
 
 
 #endif // SPI_FLASH_SST25VFXX_H_INCLUDED
