@@ -133,6 +133,7 @@ static void fsrw1_thread_entry(void* parameter)
 #define fsrw2_data_len             180              /* Less than 256 */
 static void fsrw2_thread_entry(void* parameter)
 {
+	rt_thread_t tid;
     int fd;
     int index,length;
     rt_uint32_t round;
@@ -142,12 +143,14 @@ static void fsrw2_thread_entry(void* parameter)
     static rt_uint8_t read_data2[fsrw2_data_len];
 
     round = 1;
-
+    
     while(1)
     {
         if( stop_flag )
         {
             rt_kprintf("thread fsrw1 error,thread fsrw2 quit!\r\n");
+    		tid = rt_thread_self();    
+			rt_kprintf("lseek SEEK_SET, error code %d \r\n",-tid->error);
             fsrw2_thread = RT_NULL;
             stop_flag = 0;
             return;

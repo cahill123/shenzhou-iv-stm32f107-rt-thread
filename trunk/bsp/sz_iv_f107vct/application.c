@@ -31,7 +31,7 @@
 
 #ifdef RT_USING_SPI
 //#include <spi_flash_at45dbxx.h>
-#include <spi_flash_sst25vfxx.h>
+#include <spi_flash_w25qxx.h>
 #endif
 
 #ifdef RT_USING_LWIP
@@ -50,7 +50,7 @@ void rt_init_thread_entry(void* parameter)
 		dfs_init();
 #ifdef RT_USING_SPI
 	    /* init hardware device */
-	    if(sst25vfxx_init("flash0", "spi10") != RT_EOK)
+	    if(w25qxx_init("flash0", "spi10") != RT_EOK)
 	    {							 
 	    	rt_kprintf("[error] No such spi flash!\r\n");
 	    }
@@ -61,7 +61,7 @@ void rt_init_thread_entry(void* parameter)
 		elm_init();
 
 #ifdef RT_USING_SPI
-		if (dfs_mount("flash0", "/flash0", "elm", 0, 0) == 0)
+		if (dfs_mount("flash0", "/", "elm", 0, 0) == 0)
 			rt_kprintf("SPI File System initialized!\n");
 		else
 			rt_kprintf("SPI File System init failed!\n");
