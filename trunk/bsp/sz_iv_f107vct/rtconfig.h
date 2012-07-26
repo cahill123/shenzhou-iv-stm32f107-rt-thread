@@ -151,4 +151,14 @@
 #define CHECKSUM_GEN_IP                 0
 #define CHECKSUM_GEN_UDP                0
 
+typedef unsigned char tBoolean;
+
+#ifndef true
+#define true 1
+#endif
+
+#ifndef false
+#define false 0
+#endif
+
 #endif

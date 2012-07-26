@@ -95,7 +95,7 @@ static void tcpip_init_done_callback(void *arg)
 
 	rt_sem_release((rt_sem_t)arg);
 }
-
+									
 /**
  * LwIP system initialization
  */

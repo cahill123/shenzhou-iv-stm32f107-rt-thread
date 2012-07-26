@@ -346,7 +346,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_CL, USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>Libraries\STM32F10x_StdPeriph_Driver\inc;Libraries\CMSIS\CM3\CoreSupport;..\..\components\dfs;..\..\components\finsh;..\..\components\net\lwip\src\include;.;..\..\components\net\lwip\src\include\ipv4;..\..\include;..\..\components\net\lwip\src\arch\include;..\..\components\dfs\include;..\..\components\net\lwip\src;..\..\libcpu\arm\common;..\..\libcpu\arm\stm32;..\..\components\net\lwip\src\include\netif;Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;Drivers;..\..\components\drivers\include</IncludePath>
+              <IncludePath>Libraries\STM32F10x_StdPeriph_Driver\inc;Libraries\CMSIS\CM3\CoreSupport;..\..\components\dfs;..\..\components\finsh;..\..\components\net\lwip\src\include;.;..\..\components\net\lwip\src\include\ipv4;..\..\include;..\..\components\net\lwip\src\arch\include;..\..\components\dfs\include;..\..\components\net\lwip\src;..\..\libcpu\arm\common;..\..\libcpu\arm\stm32;..\..\components\net\lwip\src\include\netif;Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x;Drivers;..\..\components\drivers\include;.\app;..\..\components\net</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -860,6 +860,16 @@
               <FileType>1</FileType>
               <FilePath>..\..\components\net\lwip\src\netif\slipif.c</FilePath>
             </File>
+            <File>
+              <FileName>def.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\net\lwip\src\core\def.c</FilePath>
+            </File>
+            <File>
+              <FileName>timers.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\components\net\lwip\src\core\timers.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1049,6 +1059,16 @@
               <FileName>spi_flash_w25qxx.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\drivers\spi_flash_w25qxx.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>ping</GroupName>
+          <Files>
+            <File>
+              <FileName>ping.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\app\ping.c</FilePath>
             </File>
           </Files>
         </Group>

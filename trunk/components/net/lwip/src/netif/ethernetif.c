@@ -81,6 +81,8 @@ static char eth_rx_thread_mb_pool[RT_LWIP_ETHTHREAD_MBOX_SIZE * 4];
 static char eth_rx_thread_stack[RT_LWIP_ETHTHREAD_STACKSIZE];
 
 
+
+
 /* Ugly hacks for old drivers compatible */
 /* ===================================== */
 #if 1
