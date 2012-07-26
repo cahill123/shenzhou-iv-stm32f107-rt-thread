@@ -21,7 +21,11 @@ struct eth_device
 	rt_err_t (*eth_tx)(rt_device_t dev, struct pbuf* p);
 };
 
-rt_err_t eth_rx_ready(struct eth_device *dev);
+void lwip_enetif_init(void);
+err_t dhcp_start(struct netif *netif);
 
+rt_err_t eth_rx_ready(struct eth_device *dev);
+rt_err_t eth_device_ready(struct eth_device* dev);
+int eth_device_init(struct eth_device * dev, char *name);
 
 #endif /* __NETIF_ETHERNETIF_H__ */
