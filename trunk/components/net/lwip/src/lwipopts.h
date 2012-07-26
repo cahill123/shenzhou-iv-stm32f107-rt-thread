@@ -3,7 +3,9 @@
 
 #include <rtconfig.h>
 
+#if defined(RT_USING_NEWLIB) || defined(RT_USING_MINILIBC)
 #define ERRNO						1
+#endif
 
 #define NO_SYS                      0
 #define LWIP_SOCKET                 1
@@ -33,19 +35,13 @@
 #define LWIP_DNS					0
 #endif
 
-#define LWIP_HAVE_LOOPIF            0
+#define LWIP_HAVE_LOOPIF            1
 
 #define LWIP_PLATFORM_BYTESWAP      0
 #define BYTE_ORDER                  LITTLE_ENDIAN
 
 /* Enable SO_RCVTIMEO processing.   */
 #define LWIP_SO_RCVTIMEO 			1
-
-#ifdef RT_USING_NEWLIB
-/* use timeval structure in newlib */
-#define LWIP_TIMEVAL_PRIVATE 0
-#include <sys/time.h>
-#endif
 
 /* #define RT_LWIP_DEBUG */
 
@@ -124,8 +120,6 @@
 /* the number of simultaneously queued TCP */
 #ifdef RT_LWIP_TCP_SEG_NUM
 #define MEMP_NUM_TCP_SEG            RT_LWIP_TCP_SEG_NUM
-#else
-#define MEMP_NUM_TCP_SEG            TCP_SND_QUEUELEN
 #endif
 
 /* MEMP_NUM_SYS_TIMEOUT: the number of simulateously active
@@ -161,8 +155,6 @@
 #define ETH_PAD_SIZE				RT_LWIP_ETH_PAD_SIZE
 #endif
 
-#define LWIP_NETIF_LINK_CALLBACK	1
-
 /** SYS_LIGHTWEIGHT_PROT
  * define SYS_LIGHTWEIGHT_PROT in lwipopts.h if you want inter-task protection
  * for certain critical regions during buffer allocation, deallocation and memory
@@ -184,13 +176,13 @@
 #define TCP_QUEUE_OOSEQ             1
 
 /* TCP Maximum segment size. */
-#define TCP_MSS                     1460
+#define TCP_MSS                     1024
 
 /* TCP sender buffer space (bytes). */
 #ifdef RT_LWIP_TCP_SND_BUF
 #define TCP_SND_BUF                 RT_LWIP_TCP_SND_BUF
 #else
-#define TCP_SND_BUF                 (TCP_MSS * 2)
+#define TCP_SND_BUF                 2048
 #endif
 
 /* TCP sender buffer space (pbufs). This must be at least = 2 *
@@ -204,9 +196,9 @@
 
 /* TCP receive window. */
 #ifdef RT_LWIP_TCP_WND
-#define TCP_WND                 	RT_LWIP_TCP_WND
+#define TCP_WND                 RT_LWIP_TCP_WND
 #else
-#define TCP_WND                 	(TCP_MSS * 2)
+#define TCP_WND                 1500
 #endif
 
 /* Maximum number of retransmissions of data segments. */
@@ -273,7 +265,7 @@
 #define LWIP_UDP                    0
 #endif
 
-#define LWIP_UDPLITE                0
+#define LWIP_UDPLITE                1
 #define UDP_TTL                     255
 #define DEFAULT_UDP_RECVMBOX_SIZE   1
 
@@ -332,6 +324,6 @@
 
 /* no read/write/close for socket */
 #define LWIP_POSIX_SOCKETS_IO_NAMES	0
-#define LWIP_NETIF_API	1
+
 
 #endif /* __LWIPOPTS_H__ */
