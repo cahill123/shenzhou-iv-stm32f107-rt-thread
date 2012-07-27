@@ -98,7 +98,7 @@ int eth_device_init(struct eth_device * dev, char *name)
 	rt_device_register(&(dev->parent), "eth0", RT_DEVICE_FLAG_RDWR);
 	return 0;
 }
-void lwip_sys_init(void)
+void lwip_sys_init1(void)
 {
 	lwip_enetif_init();
 }
