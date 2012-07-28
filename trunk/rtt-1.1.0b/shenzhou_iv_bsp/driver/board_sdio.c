@@ -174,6 +174,8 @@ static rt_size_t rt_sdcard_read(rt_device_t dev, rt_off_t pos, void* buffer, rt_
 	rt_uint32_t retry;
 	rt_uint32_t factor;
 
+	status = SD_DATA_OTHER_ERROR;
+
 	if (CardType == SDIO_HIGH_CAPACITY_SD_CARD) factor = 1;
 	else factor = SECTOR_SIZE;
 	//rt_kprintf("sd: read 0x%X, sector 0x%X, 0x%X\n", (uint32_t)buffer ,pos, size);
@@ -245,6 +247,8 @@ static rt_size_t rt_sdcard_write (rt_device_t dev, rt_off_t pos, const void* buf
 {
 	SD_Error status;
 	rt_uint32_t factor;
+
+	status = SD_DATA_OTHER_ERROR;
 
 	if (CardType == SDIO_HIGH_CAPACITY_SD_CARD) factor = 1;
 	else factor = SECTOR_SIZE;

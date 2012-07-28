@@ -60,6 +60,8 @@
 /* Using Device System */
 #define RT_USING_DEVICE
 #define RT_USING_UART1
+#define RT_USING_SPI
+#define USING_SPI1
 
 /* SECTION: Console options */
 #define RT_USING_CONSOLE
@@ -74,6 +76,7 @@
 
 /* SECTION: device filesystem */
 #define RT_USING_DFS
+//#define DFS_USING_WORKDIR
 #define RT_USING_DFS_ELMFAT
 #define RT_DFS_ELM_WORD_ACCESS
 /* Reentrancy (thread safe) of the FatFs module.  */
@@ -83,7 +86,8 @@
 /* #define RT_DFS_ELM_USE_LFN			1 */
 #define RT_DFS_ELM_MAX_LFN			255
 /* Maximum sector size to be handled. */
-#define RT_DFS_ELM_MAX_SECTOR_SIZE  512
+//#define RT_DFS_ELM_MAX_SECTOR_SIZE  512
+#define RT_DFS_ELM_MAX_SECTOR_SIZE  4096
 
 /* the max number of mounted filesystem */
 #define DFS_FILESYSTEMS_MAX			2
@@ -91,7 +95,7 @@
 #define DFS_FD_MAX					4
 
 /* SECTION: lwip, a lighwight TCP/IP protocol stack */
-#define RT_USING_LWIP
+//#define RT_USING_LWIP
 /* LwIP uses RT-Thread Memory Management */
 #define RT_LWIP_USING_RT_MEM
 /* Enable ICMP protocol*/
@@ -102,6 +106,7 @@
 #define RT_LWIP_TCP
 /* Enable DNS */
 #define RT_LWIP_DNS
+#define RT_LWIP_DHCP
 
 /* the number of simulatenously active TCP connections*/
 #define RT_LWIP_TCP_PCB_NUM	5
@@ -109,13 +114,13 @@
 /* ip address of target*/
 #define RT_LWIP_IPADDR0	192
 #define RT_LWIP_IPADDR1	168
-#define RT_LWIP_IPADDR2	1
-#define RT_LWIP_IPADDR3	30
+#define RT_LWIP_IPADDR2	150
+#define RT_LWIP_IPADDR3	149
 
 /* gateway address of target*/
 #define RT_LWIP_GWADDR0	192
 #define RT_LWIP_GWADDR1	168
-#define RT_LWIP_GWADDR2	1
+#define RT_LWIP_GWADDR2	150
 #define RT_LWIP_GWADDR3	1
 
 /* mask address of target*/

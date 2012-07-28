@@ -15,11 +15,18 @@
 // <<< Use Configuration Wizard in Context Menu >>>
 #ifndef __BOARD_H__
 #define __BOARD_H__
+#include <stdint.h>
 
 /* board configuration */
 // <o> SDCard Driver <1=>SDIO sdcard <0=>SPI MMC card
 // 	<i>Default: 1
 #define STM32_USE_SDIO			0
+
+// <o> SPI FLASH TYPE
+// <1=>Version 1: AT45DB161D
+// <2=>Version 2: SST25VF016B
+// 	<i>Default: 2
+//#define SPI_FLASH_TYPE          2
 
 /* whether use board external SRAM memory */
 // <e>Use external SRAM memory on the board
@@ -57,7 +64,11 @@ void rt_hw_board_init(void);
 void rt_hw_usart_init(void);
 
 /* SD Card init function */
-void rt_hw_msd_init(void);
+void rt_hw_sdcard_init(void);
+
+void rt_hw_spi1_baud_rate(uint16_t SPI_BaudRatePrescaler);
+
+extern struct rt_semaphore spi1_lock;
 
 #endif
 

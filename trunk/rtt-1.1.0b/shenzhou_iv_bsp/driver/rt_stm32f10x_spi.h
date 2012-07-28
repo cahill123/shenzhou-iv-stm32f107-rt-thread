@@ -1,14 +1,27 @@
-#ifndef STM32_SPI_H_INCLUDED
-#define STM32_SPI_H_INCLUDED
+/*
+ * File      : stm32f20x_40x_spi.h
+ * This file is part of RT-Thread RTOS
+ * COPYRIGHT (C) 2009 RT-Thread Develop Team
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.rt-thread.org/license/LICENSE
+ *
+ * Change Logs:
+ * Date           Author       Notes
+ * 20012-01-01    aozima       first implementation.
+ */
 
-#include <rtdevice.h>
+#ifndef RT_STM32F10X_SPI_H_INCLUDED
+#define RT_STM32F10X_SPI_H_INCLUDED
 
-#include "stm32f10x.h"
+#include <stdint.h>
+#include <rtthread.h>
+#include <drivers/spi.h>
+
 #include "stm32f10x_spi.h"
 
-#include "board.h"
-
-#define SPI_USE_DMA
+//#define SPI_USE_DMA
 
 struct stm32_spi_bus
 {
@@ -30,7 +43,10 @@ struct stm32_spi_cs
     uint16_t GPIO_Pin;
 };
 
-/* function list */
+/* public function */
+rt_err_t stm32_spi_register(SPI_TypeDef * SPI,
+                            struct stm32_spi_bus * stm32_spi,
+                            const char * spi_bus_name);
 extern void rt_stm32f10x_spi_init(void);
 
-#endif // STM32_SPI_H_INCLUDED
+#endif // RT_STM32F10X_SPI_H_INCLUDED
