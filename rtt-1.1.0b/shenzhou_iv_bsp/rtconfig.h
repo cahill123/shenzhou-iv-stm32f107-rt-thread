@@ -62,6 +62,8 @@
 #define RT_USING_UART1
 #define RT_USING_SPI
 #define USING_SPI1
+#define RT_SPI_STM32F1XX
+#define SPI_USE_DMA
 
 /* SECTION: Console options */
 #define RT_USING_CONSOLE
@@ -95,7 +97,7 @@
 #define DFS_FD_MAX					4
 
 /* SECTION: lwip, a lighwight TCP/IP protocol stack */
-//#define RT_USING_LWIP
+#define RT_USING_LWIP
 /* LwIP uses RT-Thread Memory Management */
 #define RT_LWIP_USING_RT_MEM
 /* Enable ICMP protocol*/
@@ -107,6 +109,7 @@
 /* Enable DNS */
 #define RT_LWIP_DNS
 #define RT_LWIP_DHCP
+//#define PING_USE_SOCKETS
 
 /* the number of simulatenously active TCP connections*/
 #define RT_LWIP_TCP_PCB_NUM	5
@@ -114,13 +117,13 @@
 /* ip address of target*/
 #define RT_LWIP_IPADDR0	192
 #define RT_LWIP_IPADDR1	168
-#define RT_LWIP_IPADDR2	150
+#define RT_LWIP_IPADDR2	0
 #define RT_LWIP_IPADDR3	149
 
 /* gateway address of target*/
 #define RT_LWIP_GWADDR0	192
 #define RT_LWIP_GWADDR1	168
-#define RT_LWIP_GWADDR2	150
+#define RT_LWIP_GWADDR2	0
 #define RT_LWIP_GWADDR3	1
 
 /* mask address of target*/

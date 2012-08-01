@@ -61,6 +61,8 @@
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
+            <nStopU1X>0</nStopU1X>
+            <nStopU2X>0</nStopU2X>
           </BeforeCompile>
           <BeforeMake>
             <RunUserProg1>0</RunUserProg1>
@@ -342,6 +344,7 @@
             <Rwpi>0</Rwpi>
             <wLevel>0</wLevel>
             <uThumb>0</uThumb>
+            <uSurpInc>0</uSurpInc>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define>STM32F10X_CL, USE_STDPERIPH_DRIVER</Define>
@@ -357,6 +360,7 @@
             <SplitLS>0</SplitLS>
             <SwStkChk>0</SwStkChk>
             <NoWarn>0</NoWarn>
+            <uSurpInc>0</uSurpInc>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -937,6 +941,16 @@
           <GroupName>Drivers</GroupName>
           <Files>
             <File>
+              <FileName>stm32f10x_20x_40x_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\driver\stm32f10x_20x_40x_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>rt_rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\driver\rt_rtc.c</FilePath>
+            </File>
+            <File>
               <FileName>stm32_eth.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\driver\stm32_eth.c</FilePath>
@@ -962,50 +976,6 @@
               <FilePath>.\driver\led.c</FilePath>
             </File>
             <File>
-              <FileName>rt_stm32f10x_spi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\driver\rt_stm32f10x_spi.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>2</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
               <FileName>spi_flash_w25qxx.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\driver\spi_flash_w25qxx.c</FilePath>
@@ -1014,16 +984,6 @@
               <FileName>spi_sd.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\driver\spi_sd.c</FilePath>
-            </File>
-            <File>
-              <FileName>spi_core.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\rt-thread_os\components\drivers\spi\spi_core.c</FilePath>
-            </File>
-            <File>
-              <FileName>spi_dev.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\rt-thread_os\components\drivers\spi\spi_dev.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1034,6 +994,56 @@
               <FileName>fs_test.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\rt-thread_os\examples\test\fs_test.c</FilePath>
+            </File>
+            <File>
+              <FileName>device_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\rt-thread_os\examples\test\device_test.c</FilePath>
+            </File>
+            <File>
+              <FileName>mem_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\rt-thread_os\examples\test\mem_test.c</FilePath>
+            </File>
+            <File>
+              <FileName>dhry_1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\rt-thread_os\examples\test\dhry_1.c</FilePath>
+            </File>
+            <File>
+              <FileName>dhry_2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\rt-thread_os\examples\test\dhry_2.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Components</GroupName>
+          <Files>
+            <File>
+              <FileName>spi_dev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\rt-thread_os\components\drivers\spi\spi_dev.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\rt-thread_os\components\drivers\spi\spi_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\rt-thread_os\components\drivers\rtc\rtc.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>App</GroupName>
+          <Files>
+            <File>
+              <FileName>ping.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\app\ping.c</FilePath>
             </File>
           </Files>
         </Group>
