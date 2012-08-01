@@ -376,7 +376,7 @@
             <ScatterFile></ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
-            <Misc> --keep __fsym_* --keep __vsym_* </Misc>
+            <Misc>--keep __fsym_* --keep __vsym_*</Misc>
             <LinkerInputFile></LinkerInputFile>
             <DisabledWarnings></DisabledWarnings>
           </LDads>
@@ -1064,13 +1064,6 @@
         </Group>
         <Group>
           <GroupName>ping</GroupName>
-          <Files>
-            <File>
-              <FileName>ping.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\app\ping.c</FilePath>
-            </File>
-          </Files>
         </Group>
       </Groups>
     </Target>

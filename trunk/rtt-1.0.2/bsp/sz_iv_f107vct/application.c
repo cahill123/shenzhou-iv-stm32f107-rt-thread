@@ -94,7 +94,7 @@ void rt_init_thread_entry(void* parameter)
         rt_device_init_all();
 
         /* init lwip system */
-        lwip_sys_init();
+        //lwip_sys_init();
         rt_kprintf("TCP/IP initialized!\n");
     }
 #endif

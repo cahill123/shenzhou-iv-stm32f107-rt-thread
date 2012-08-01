@@ -521,7 +521,7 @@ static
 void mem_cpy (void* dst, const void* src, UINT cnt) {
 	BYTE *d = (BYTE*)dst;
 	const BYTE *s = (const BYTE*)src;
-
+/*
 #if _WORD_ACCESS == 1
 	while (cnt >= sizeof(int)) {
 		*(int*)d = *(int*)s;
@@ -529,6 +529,7 @@ void mem_cpy (void* dst, const void* src, UINT cnt) {
 		cnt -= sizeof(int);
 	}
 #endif
+*/
 	while (cnt--)
 		*d++ = *s++;
 }

@@ -18,6 +18,7 @@
 #include "stm32f10x.h"
 #include "board.h"
 #include "led.h"
+#include "rt_rtc.h"
 
 #ifdef RT_USING_SPI
 #include "stm32f10x_spi.h"
@@ -94,14 +95,13 @@ void rt_hw_board_init()
 	/* Configure the SysTick */
 	SysTick_Configuration();
 
-	rt_hw_led_init();
 	rt_hw_usart_init();
-
+	rt_hw_led_init();
+	rt_hw_rtc_init();
+	
 	rt_console_set_device(CONSOLE_DEVICE);
 #ifdef RT_USING_SPI
-	rt_kprintf("RT_USING_SPI \r\n");
     rt_stm32f10x_spi_init();
-
 #   ifdef USING_SPI1
     /* attach spi10 : CS PA4 */
     {
@@ -119,7 +119,7 @@ void rt_hw_board_init()
 
         RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
 
-	    GPIO_SetBits(GPIOB, GPIO_Pin_9);
+				GPIO_SetBits(GPIOB, GPIO_Pin_9);
         GPIO_Init(GPIOB, &GPIO_InitStructure);
 
 
