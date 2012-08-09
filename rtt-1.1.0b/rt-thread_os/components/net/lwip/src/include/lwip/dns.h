@@ -43,7 +43,7 @@ extern "C" {
 #endif
 
 /** DNS timer period */
-#define DNS_TMR_INTERVAL          1000
+#define DNS_TMR_INTERVAL          1500
 
 /** DNS field TYPE used for "Resource Records" */
 #define DNS_RRTYPE_A              1     /* a host address */

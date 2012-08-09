@@ -119,7 +119,7 @@ void rt_hw_board_init()
 
         RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
 
-				GPIO_SetBits(GPIOB, GPIO_Pin_9);
+		GPIO_SetBits(GPIOB, GPIO_Pin_9);
         GPIO_Init(GPIOB, &GPIO_InitStructure);
 
 

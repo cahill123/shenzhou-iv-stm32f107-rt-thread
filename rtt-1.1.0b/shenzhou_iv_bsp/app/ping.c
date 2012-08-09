@@ -215,13 +215,13 @@ ping_recv(int s)
 }
 
 static void
-ping_thread(void *arg)
+ping_host_thread(void *arg)
 {
-  int s;
+  int s,i=0;
   int timeout = PING_RCV_TIMEO;
   ip_addr_t ping_target;
-
-  LWIP_UNUSED_ARG(arg);
+  char *host = (char *)arg;
+  //LWIP_UNUSED_ARG(arg);
 
   if ((s = lwip_socket(AF_INET, SOCK_RAW, IP_PROTO_ICMP)) < 0) {
     return;
@@ -230,19 +230,28 @@ ping_thread(void *arg)
   lwip_setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
 
   while (1) {
-    ping_target = PING_TARGET;
+    //ping_target = PING_TARGET;
+	if (i>4) break;
+	i++;  
+	(ip4_addr_set_u32(&ping_target, ipaddr_addr(host)));
 
     if (ping_send(s, &ping_target) == ERR_OK) {
-      LWIP_DEBUGF( PING_DEBUG, ("ping: send "));
-      ip_addr_debug_print(PING_DEBUG, &ping_target);
-      LWIP_DEBUGF( PING_DEBUG, ("\n"));
-
+      //LWIP_DEBUGF( PING_DEBUG, ("ping: send "));
+      //ip_addr_debug_print(PING_DEBUG, &ping_target);
+      //LWIP_DEBUGF( PING_DEBUG, ("\n"));
+			rt_kprintf("ping: send ");
+			ip_addr_debug_print1(&ping_target);
+			rt_kprintf("\n");
+		
       ping_time = sys_now();
       ping_recv(s);
     } else {
-      LWIP_DEBUGF( PING_DEBUG, ("ping: send "));
-      ip_addr_debug_print(PING_DEBUG, &ping_target);
-      LWIP_DEBUGF( PING_DEBUG, (" - error\n"));
+      //LWIP_DEBUGF( PING_DEBUG, ("ping: send "));
+      //ip_addr_debug_print(PING_DEBUG, &ping_target);
+      //LWIP_DEBUGF( PING_DEBUG, (" - error\n"));
+			rt_kprintf("ping: send ");
+			ip_addr_debug_print1(&ping_target);
+			rt_kprintf(" - error\n");
     }
     sys_msleep(PING_DELAY);
   }
@@ -250,9 +259,9 @@ ping_thread(void *arg)
 
 
 static void
-ping_test(void)
+ping_host(char * host)
 {
-	int s;
+	int s,i=0;
 	int timeout = PING_RCV_TIMEO;
 	ip_addr_t ping_target;
 
@@ -264,8 +273,11 @@ ping_test(void)
 	lwip_setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
 
 	while (1) {
+		if (i>4) break;
+		i++;  
 		//ping_target = netif_default->gw;
-		IP4_ADDR(&ping_target,210,82,5,1);
+		//IP4_ADDR(&ping_target,210,82,5,1);
+		(ip4_addr_set_u32(&ping_target, ipaddr_addr(host))); 
 
 		if (ping_send(s, &ping_target) == ERR_OK) {
 			//LWIP_DEBUGF( PING_DEBUG, ("ping: send "));
@@ -380,17 +392,32 @@ ping_send_now(void)
 #endif /* PING_USE_SOCKETS */
 
 void
-ping_init(void)
+ping_init(char *host)
 {
-#ifdef PING_USE_SOCKETS
-  sys_thread_new("ping_thread", ping_thread, NULL, DEFAULT_THREAD_STACKSIZE, DEFAULT_THREAD_PRIO);
-#else /* PING_USE_SOCKETS */
-  ping_raw_init();
-#endif /* PING_USE_SOCKETS */
+//#ifdef PING_USE_SOCKETS
+//  sys_thread_new("ping_thread", ping_thread, NULL, DEFAULT_THREAD_STACKSIZE, DEFAULT_THREAD_PRIO);
+//#else /* PING_USE_SOCKETS */
+//  ping_raw_init();
+//#endif /* PING_USE_SOCKETS */
+	
+    rt_thread_t ping_thread;
+
+#if (RT_THREAD_PRIORITY_MAX == 32)
+    ping_thread = rt_thread_create("ping",
+                                   ping_host_thread, (void *)host,
+                                   2048, 9, 20);
+#else
+    ping_thread = rt_thread_create("ping",
+                                   ping_thread, (void *)host,
+                                   2048, 81, 20);
+#endif
+
+    if (ping_thread != RT_NULL)
+        rt_thread_startup(ping_thread);
 }
 #ifdef RT_USING_FINSH
 #include <finsh.h>
 FINSH_FUNCTION_EXPORT_ALIAS(ping_init, ping_init, test ping(). e.g: ping_init())
-FINSH_FUNCTION_EXPORT_ALIAS(ping_test, ping_test, test ping(). e.g: ping_test())
+FINSH_FUNCTION_EXPORT_ALIAS(ping_host, ping, test ping(). e.g: ping(xx))
 #endif
 #endif /* LWIP_RAW */
