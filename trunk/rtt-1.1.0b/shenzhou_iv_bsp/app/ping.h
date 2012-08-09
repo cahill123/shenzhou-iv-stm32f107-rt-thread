@@ -9,7 +9,7 @@
 #endif
 
 
-void ping_init(void);
+//void ping_init(&);
 
 #ifndef PING_USE_SOCKETS
 void ping_send_now(void);

@@ -108,7 +108,7 @@
 #define RT_LWIP_TCP
 /* Enable DNS */
 #define RT_LWIP_DNS
-#define RT_LWIP_DHCP
+//#define RT_LWIP_DHCP
 //#define PING_USE_SOCKETS
 
 /* the number of simulatenously active TCP connections*/
@@ -117,13 +117,13 @@
 /* ip address of target*/
 #define RT_LWIP_IPADDR0	192
 #define RT_LWIP_IPADDR1	168
-#define RT_LWIP_IPADDR2	0
+#define RT_LWIP_IPADDR2	150
 #define RT_LWIP_IPADDR3	149
 
 /* gateway address of target*/
 #define RT_LWIP_GWADDR0	192
 #define RT_LWIP_GWADDR1	168
-#define RT_LWIP_GWADDR2	0
+#define RT_LWIP_GWADDR2	150
 #define RT_LWIP_GWADDR3	1
 
 /* mask address of target*/
@@ -131,6 +131,9 @@
 #define RT_LWIP_MSKADDR1	255
 #define RT_LWIP_MSKADDR2	255
 #define RT_LWIP_MSKADDR3	0
+
+//#define DNS_SERVER_ADDRESS        inet_addr("192.168.150.1") 
+//#define DNS_SERVER_ADDRESS(ipaddr)        (ip4_addr_set_u32(ipaddr, ipaddr_addr("192.168.150.1"))) 
 
 /* tcp thread options */
 #define RT_LWIP_TCPTHREAD_PRIORITY		12

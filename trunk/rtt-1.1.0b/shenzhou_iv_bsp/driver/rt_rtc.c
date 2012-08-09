@@ -99,6 +99,7 @@ int RTC_Configuration(void)
     while ( (RCC_GetFlagStatus(RCC_FLAG_LSERDY) == RESET) && (--count) );
     if ( count == 0 )
     {
+		rt_kprintf("RTC no init!");
         return -1;
     }
 
@@ -113,6 +114,14 @@ int RTC_Configuration(void)
 
     /* Wait until last write operation on RTC registers has finished */
     RTC_WaitForLastTask();
+	
+	/* Enable the RTC Second */
+	/* 使能RTC的秒中断 */	
+	//RTC_ITConfig(RTC_IT_SEC, ENABLE);
+
+	/* Wait until last write operation on RTC registers has finished */
+	/* 等待上一次对RTC寄存器的写操作完成 */	
+	//RTC_WaitForLastTask();
 
     /* Set RTC prescaler: set RTC period to 1sec */
     RTC_SetPrescaler(32767); /* RTC period = RTCCLK/RTC_PR = (32.768 KHz)/(32767+1) */
