@@ -145,8 +145,8 @@
 #define RT_LWIP_TCP_SND_BUF	8192
 //#define RT_LWIP_TCP_SND_BUF		2048
 /* TCP receive window. */
-#define RT_LWIP_TCP_WND		8192
-//#define RT_LWIP_TCP_WND			(1024 * 20)
+//#define RT_LWIP_TCP_WND		8192
+#define RT_LWIP_TCP_WND			(1024 * 20)
 
 /* SECTION: RT-Thread/GUI */
 /* #define RT_USING_RTGUI */
