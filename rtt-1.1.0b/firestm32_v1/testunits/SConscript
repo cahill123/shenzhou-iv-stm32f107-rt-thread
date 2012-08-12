@@ -1,0 +1,27 @@
+import rtconfig
+Import('RTT_ROOT')
+from building import *
+
+# get current directory
+cwd = GetCurrentDir()
+test_unit_path = RTT_ROOT + '/examples/test'
+
+src = []
+group = {}
+path = [test_unit_path]
+CPPDEFINES = []
+
+# The set of source files associated with this SConscript file.
+if GetDepend(['RT_USING_TEST_UNIT']):
+#	src = [test_unit_path + '/mem_test.c']
+	if GetDepend(['RT_USING_DEVICE']):
+		src += [test_unit_path + '/device_test.c']
+	if GetDepend(['RT_USING_DFS']):
+		src += [test_unit_path + '/fs_test.c']
+#	if GetDepend(['RT_USING_LWIP']):
+#		src += [test_unit_path + '/net_test.c']
+
+	group = DefineGroup('TestUnits', src, depend = [''], CPPPATH = path, CPPDEFINES = CPPDEFINES)
+
+Return('group')
+
