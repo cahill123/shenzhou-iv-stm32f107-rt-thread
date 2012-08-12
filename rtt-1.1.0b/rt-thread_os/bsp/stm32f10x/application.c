@@ -100,6 +100,7 @@ void rt_init_thread_entry(void* parameter)
 #ifdef RT_USING_LWIP
 	{
 		extern void lwip_sys_init(void);
+		//rt_device_t ethernet;//以太网的设备变量
 
 		/* register ethernetif device */
 		eth_system_device_init();
@@ -117,7 +118,16 @@ void rt_init_thread_entry(void* parameter)
 
 		/* re-init device driver */
 		rt_device_init_all();
-
+		//ethernet = rt_device_find("e0");
+		//if (ethernet != RT_NULL)
+	    //{
+		//	rt_device_init(ethernet);
+		//}
+		//else
+		//{
+		//	rt_kprintf("ethernet initial failed\n");
+		//}
+		
 		/* init lwip system */
 		lwip_sys_init();
 		rt_kprintf("TCP/IP initialized!\n");

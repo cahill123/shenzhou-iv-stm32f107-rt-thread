@@ -16,11 +16,15 @@
 #include <netif/ethernetif.h>
 #include <stm32f10x.h>
 #include <stm32f10x_spi.h>
+//#include "stm32f10x_exti.h"
 
 #define MAX_ADDR_LEN    6
 
-#define CSACTIVE 	GPIOC->BRR = GPIO_Pin_12;
-#define CSPASSIVE	GPIOC->BSRR = GPIO_Pin_12;
+//#define CSACTIVE 	GPIOC->BRR = GPIO_Pin_12;
+//#define CSPASSIVE	GPIOC->BSRR = GPIO_Pin_12;
+
+#define CSACTIVE    GPIOA->BRR = GPIO_Pin_4;
+#define CSPASSIVE   GPIOA->BSRR = GPIO_Pin_4;
 
 struct net_device
 {
@@ -211,11 +215,11 @@ rt_inline void enc28j60_interrupt_enable(rt_uint32_t level)
  */
 static rt_bool_t enc28j60_check_link_status()
 {
-	rt_uint16_t reg;
-	int duplex;
+    rt_uint16_t reg;
+    int duplex;
 
-	reg = enc28j60_phy_read(PHSTAT2);
-	duplex = reg & PHSTAT2_DPXSTAT;
+    reg = enc28j60_phy_read(PHSTAT2);
+    duplex = reg & PHSTAT2_DPXSTAT;
 
 	if (reg & PHSTAT2_LSTAT)
 	{
@@ -669,8 +673,8 @@ static void RCC_Configuration(void)
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
 
     /* enable gpiob port clock */
-    //RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC | RCC_APB2Periph_AFIO, ENABLE);
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC , ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO, ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE | RCC_APB2Periph_AFIO, ENABLE);
 }
 
 static void NVIC_Configuration(void)
@@ -678,7 +682,8 @@ static void NVIC_Configuration(void)
     NVIC_InitTypeDef NVIC_InitStructure;
 
     /* Enable the EXTI0 Interrupt */
-    NVIC_InitStructure.NVIC_IRQChannel = EXTI2_IRQn;
+    //NVIC_InitStructure.NVIC_IRQChannel = EXTI2_IRQn;
+	NVIC_InitStructure.NVIC_IRQChannel = EXTI9_5_IRQn;////////////////////////////
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
@@ -691,10 +696,14 @@ static void GPIO_Configuration()
     EXTI_InitTypeDef EXTI_InitStructure;
 
 	/* configure PB0 as external interrupt */
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
+	//GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
+    //GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	//GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;
+	//GPIO_Init(GPIOC, &GPIO_InitStructure);
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;/////////////////////终端不对的话换到GPIO_PIN_1,2
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;
-	GPIO_Init(GPIOC, &GPIO_InitStructure);
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;
+    GPIO_Init(GPIOE, &GPIO_InitStructure);
 
     /* Configure SPI1 pins:  SCK, MISO and MOSI ----------------------------*/
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
@@ -702,22 +711,28 @@ static void GPIO_Configuration()
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_Init(GPIOC, &GPIO_InitStructure);
+	//GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;
+	//GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	//GPIO_Init(GPIOC, &GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
 
     /* Connect ENC28J60 EXTI Line to GPIOB Pin 0 */
-    GPIO_EXTILineConfig(GPIO_PortSourceGPIOC, GPIO_PinSource2);
+    //GPIO_EXTILineConfig(GPIO_PortSourceGPIOC, GPIO_PinSource2);
+	GPIO_EXTILineConfig(GPIO_PortSourceGPIOE, GPIO_PinSource5);/////////////////////////
 
     /* Configure ENC28J60 EXTI Line to generate an interrupt on falling edge */
-    EXTI_InitStructure.EXTI_Line = EXTI_Line2;
-    EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+    //EXTI_InitStructure.EXTI_Line = EXTI_Line2;
+    EXTI_InitStructure.EXTI_Line = EXTI_Line5;////////////////////////////
+	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
     EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;
     EXTI_InitStructure.EXTI_LineCmd = ENABLE;
     EXTI_Init(&EXTI_InitStructure);
 
 	/* Clear the Key Button EXTI line pending bit */
-	EXTI_ClearITPendingBit(EXTI_Line2);
+	//EXTI_ClearITPendingBit(EXTI_Line2);
+	EXTI_ClearITPendingBit(EXTI_Line5);//////////////////////////
 }
 
 static void SetupSPI (void)
