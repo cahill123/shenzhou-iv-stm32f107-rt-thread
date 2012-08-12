@@ -16,11 +16,15 @@
 #include <netif/ethernetif.h>
 #include <stm32f10x.h>
 #include <stm32f10x_spi.h>
+//#include "stm32f10x_exti.h"
 
 #define MAX_ADDR_LEN    6
 
-#define CSACTIVE 	GPIOC->BRR = GPIO_Pin_12;
-#define CSPASSIVE	GPIOC->BSRR = GPIO_Pin_12;
+//#define CSACTIVE 	GPIOC->BRR = GPIO_Pin_12;
+//#define CSPASSIVE	GPIOC->BSRR = GPIO_Pin_12;
+
+#define CSACTIVE    GPIOA->BRR = GPIO_Pin_4;
+#define CSPASSIVE   GPIOA->BSRR = GPIO_Pin_4;
 
 struct net_device
 {
@@ -211,11 +215,11 @@ rt_inline void enc28j60_interrupt_enable(rt_uint32_t level)
  */
 static rt_bool_t enc28j60_check_link_status()
 {
-	rt_uint16_t reg;
-	int duplex;
+    rt_uint16_t reg;
+//  int duplex;
 
-	reg = enc28j60_phy_read(PHSTAT2);
-	duplex = reg & PHSTAT2_DPXSTAT;
+    reg = enc28j60_phy_read(PHSTAT2);
+//  duplex = reg & PHSTAT2_DPXSTAT;
 
 	if (reg & PHSTAT2_LSTAT)
 	{
@@ -332,10 +336,10 @@ void enc28j60_isr()
 		/* TX Error handler */
 		if ((eir & EIR_TXERIF) != 0)
 		{
-            enc28j60_set_bank(ECON1);
-            spi_write_op(ENC28J60_BIT_FIELD_SET, ECON1, ECON1_TXRST);
-            spi_write_op(ENC28J60_BIT_FIELD_CLR, ECON1, ECON1_TXRST);
-            enc28j60_set_bank(EIR);
+            //enc28j60_set_bank(ECON1);
+            //spi_write_op(ENC28J60_BIT_FIELD_SET, ECON1, ECON1_TXRST);
+            //spi_write_op(ENC28J60_BIT_FIELD_CLR, ECON1, ECON1_TXRST);
+            //enc28j60_set_bank(EIR);
 			spi_write_op(ENC28J60_BIT_FIELD_CLR, EIR, EIR_TXERIF);
 		}
 
@@ -669,8 +673,8 @@ static void RCC_Configuration(void)
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
 
     /* enable gpiob port clock */
-    //RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC | RCC_APB2Periph_AFIO, ENABLE);
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC , ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO, ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE | RCC_APB2Periph_AFIO, ENABLE);
 }
 
 static void NVIC_Configuration(void)
@@ -679,6 +683,7 @@ static void NVIC_Configuration(void)
 
     /* Enable the EXTI0 Interrupt */
     NVIC_InitStructure.NVIC_IRQChannel = EXTI2_IRQn;
+	//NVIC_InitStructure.NVIC_IRQChannel = EXTI9_5_IRQn;////////////////////////////
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
@@ -691,10 +696,14 @@ static void GPIO_Configuration()
     EXTI_InitTypeDef EXTI_InitStructure;
 
 	/* configure PB0 as external interrupt */
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
+	//GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
+    //GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	//GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;
+	//GPIO_Init(GPIOC, &GPIO_InitStructure);
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;/////////////////////终端不对的话换到GPIO_PIN_1,2
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;
-	GPIO_Init(GPIOC, &GPIO_InitStructure);
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;
+    GPIO_Init(GPIOE, &GPIO_InitStructure);
 
     /* Configure SPI1 pins:  SCK, MISO and MOSI ----------------------------*/
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
@@ -702,22 +711,28 @@ static void GPIO_Configuration()
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_Init(GPIOC, &GPIO_InitStructure);
+	//GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;
+	//GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	//GPIO_Init(GPIOC, &GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
 
     /* Connect ENC28J60 EXTI Line to GPIOB Pin 0 */
-    GPIO_EXTILineConfig(GPIO_PortSourceGPIOC, GPIO_PinSource2);
+    //GPIO_EXTILineConfig(GPIO_PortSourceGPIOC, GPIO_PinSource2);
+	GPIO_EXTILineConfig(GPIO_PortSourceGPIOE, GPIO_PinSource5);/////////////////////////
 
     /* Configure ENC28J60 EXTI Line to generate an interrupt on falling edge */
     EXTI_InitStructure.EXTI_Line = EXTI_Line2;
-    EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+    //EXTI_InitStructure.EXTI_Line = EXTI_Line5;////////////////////////////
+	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
     EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;
     EXTI_InitStructure.EXTI_LineCmd = ENABLE;
     EXTI_Init(&EXTI_InitStructure);
 
 	/* Clear the Key Button EXTI line pending bit */
 	EXTI_ClearITPendingBit(EXTI_Line2);
+	//EXTI_ClearITPendingBit(EXTI_Line5);//////////////////////////
 }
 
 static void SetupSPI (void)
@@ -729,7 +744,7 @@ static void SetupSPI (void)
     SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
     SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;
     SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;
-    SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_8;//SPI_BaudRatePrescaler_4;
+    SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4;//SPI_BaudRatePrescaler_8;//SPI_BaudRatePrescaler_4;
     SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
     SPI_InitStructure.SPI_CRCPolynomial = 7;
     SPI_Init(SPI1, &SPI_InitStructure);
@@ -757,8 +772,8 @@ void rt_hw_enc28j60_init()
 	/* Update MAC address */
 	/* OUI 00-04-A3 Microchip Technology, Inc. */
 	enc28j60_dev_entry.dev_addr[0] = 0x00;
-	enc28j60_dev_entry.dev_addr[1] = 0x04;
-	enc28j60_dev_entry.dev_addr[2] = 0xA3;
+	enc28j60_dev_entry.dev_addr[1] = 0x30;// 0x04;
+	enc28j60_dev_entry.dev_addr[2] = 0x6c;// 0xA3;
 	/* generate MAC addr (only for test) */
 	enc28j60_dev_entry.dev_addr[3] = 0x11;
 	enc28j60_dev_entry.dev_addr[4] = 0x22;
@@ -769,9 +784,11 @@ void rt_hw_enc28j60_init()
 	eth_device_init(&(enc28j60_dev->parent), "e0");
 }
 
+#ifdef RT_USING_FINSH
 #include <finsh.h>
 void show_reg(void)
 {
     //
 }
 FINSH_FUNCTION_EXPORT(show_reg,show en28j60 regs)
+#endif

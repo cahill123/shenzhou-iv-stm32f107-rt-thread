@@ -60,6 +60,7 @@
 /* Using Device System */
 #define RT_USING_DEVICE
 #define RT_USING_UART1
+#define RT_USING_UART2
 
 /* SECTION: Console options */
 #define RT_USING_CONSOLE
@@ -93,6 +94,7 @@
 
 /* SECTION: lwip, a lighwight TCP/IP protocol stack */
 /* #define RT_USING_LWIP */
+#define RT_USING_LWIP
 /* LwIP uses RT-Thread Memory Management */
 #define RT_LWIP_USING_RT_MEM
 /* Enable ICMP protocol*/
@@ -109,6 +111,7 @@
 
 /* Using DHCP */
 /* #define RT_LWIP_DHCP */
+#define RT_LWIP_DHCP
 
 /* ip address of target*/
 #define RT_LWIP_IPADDR0	192
