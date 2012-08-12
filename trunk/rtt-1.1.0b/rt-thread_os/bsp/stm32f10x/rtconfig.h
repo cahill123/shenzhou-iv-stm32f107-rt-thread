@@ -93,6 +93,7 @@
 
 /* SECTION: lwip, a lighwight TCP/IP protocol stack */
 /* #define RT_USING_LWIP */
+#define RT_USING_LWIP
 /* LwIP uses RT-Thread Memory Management */
 #define RT_LWIP_USING_RT_MEM
 /* Enable ICMP protocol*/
@@ -109,17 +110,18 @@
 
 /* Using DHCP */
 /* #define RT_LWIP_DHCP */
+#define RT_LWIP_DHCP
 
 /* ip address of target*/
 #define RT_LWIP_IPADDR0	192
 #define RT_LWIP_IPADDR1	168
-#define RT_LWIP_IPADDR2	1
+#define RT_LWIP_IPADDR2	0
 #define RT_LWIP_IPADDR3	30
 
 /* gateway address of target*/
 #define RT_LWIP_GWADDR0	192
 #define RT_LWIP_GWADDR1	168
-#define RT_LWIP_GWADDR2	1
+#define RT_LWIP_GWADDR2	0
 #define RT_LWIP_GWADDR3	1
 
 /* mask address of target*/
@@ -140,8 +142,10 @@
 
 /* TCP sender buffer space */
 #define RT_LWIP_TCP_SND_BUF	8192
+//#define RT_LWIP_TCP_SND_BUF		2048
 /* TCP receive window. */
 #define RT_LWIP_TCP_WND		8192
+//#define RT_LWIP_TCP_WND			(1024 * 20)
 
 /* SECTION: RT-Thread/GUI */
 /* #define RT_USING_RTGUI */
