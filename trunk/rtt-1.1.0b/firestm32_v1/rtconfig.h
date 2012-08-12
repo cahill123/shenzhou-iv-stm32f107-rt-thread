@@ -74,6 +74,7 @@
 
 /* SECTION: device filesystem */
 /* #define RT_USING_DFS */
+#define RT_USING_DFS
 
 #define RT_USING_DFS_ELMFAT
 #define RT_DFS_ELM_WORD_ACCESS
@@ -168,6 +169,9 @@
 /* #define RTGUI_USING_MOUSE_CURSOR */
 /* default font size in RTGUI */
 #define RTGUI_DEFAULT_FONT_SIZE	16
+
+/* #define RT_USING_TEST_UNIT */
+#define RT_USING_TEST_UNIT
 
 /* image support */
 /* #define RTGUI_IMAGE_XPM */
